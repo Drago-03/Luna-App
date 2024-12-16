@@ -31,17 +31,20 @@ A sophisticated AI assistant powered by the Llama 70B model, featuring voice int
 ### Installation
 
 1. Clone the repository:
+
 ```bash
-git clone https://github.com/yourusername/luna-ai-assistant.git
-cd luna-ai-assistant
+git clone https://github.com/yourusername/Luna-App.git
+cd Luna-App
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -69,12 +72,15 @@ src/
 ## 🎯 Core Features
 
 ### Voice Interaction
+
 Luna uses the Web Speech API for natural voice interactions, supporting both speech recognition and synthesis with a feminine voice profile.
 
 ### Continuous Learning
+
 The system implements a training pipeline that allows Luna to learn from conversations and improve over time. Learning data is stored persistently and can be used for model fine-tuning.
 
 ### Real-time Logging
+
 Comprehensive logging system tracks all interactions, model responses, and system events for monitoring and debugging.
 
 ## 🔒 Privacy & Security
@@ -99,4 +105,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<p align="center">Made with ❤️ by [Your Name]</p>
+<div align="center">Made by Drago</div>

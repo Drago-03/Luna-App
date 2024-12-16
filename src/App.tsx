@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Mic, MicOff, Bot, AlertCircle } from 'lucide-react';
 import { SpeechService } from './services/speechService';
 import { LunaCore } from './services/lunaCore';
