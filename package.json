@@ -12,17 +12,18 @@
     "train": "node scripts/train.js"
   },
   "dependencies": {
+    "@xenova/transformers": "^2.15.1",
+    "comlink": "^4.4.1",
+    "dexie": "^3.2.4",
+    "electron-store": "^8.1.0",
     "lucide-react": "^0.344.0",
+    "onnxruntime-web": "^1.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "dexie": "^3.2.4",
-    "@xenova/transformers": "^2.15.1",
-    "onnxruntime-web": "^1.17.0",
-    "comlink": "^4.4.1",
-    "electron-store": "^8.1.0",
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "@types/json-schema": "^7.0.15",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
