@@ -2,14 +2,17 @@
   "name": "luna-ai-assistant",
   "private": true,
   "version": "0.1.0",
-  "main": "electron/main.js",
+  "main": "dist-electron/main.js",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"electron .\"",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && tsc -p tsconfig.electron.json",
     "lint": "eslint .",
-    "package": "electron-builder",
-    "train": "node scripts/train.js"
+    "package": "npm run build && electron-builder",
+    "train": "node scripts/train.js",
+    "package:win": "npm run build && electron-builder --win",
+    "package:mac": "npm run build && electron-builder --mac",
+    "package:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
     "@xenova/transformers": "^2.17.2",
@@ -56,7 +59,7 @@
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
+      "dist-electron/**/*"
     ],
     "publish": [{
       "provider": "github",
@@ -77,5 +80,17 @@
       "icon": "build/icon.png",
       "category": "Utility"
     }
-  }
+  },
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "dist-electron",
+    "rootDir": "electron",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "electron/**/*"
+  ]
 }

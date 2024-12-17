@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Exit on error
-set -e
-
 echo "🚀 Starting build process..."
 
 # Clean previous builds
@@ -17,29 +14,31 @@ npm install
 echo "🔨 Building React app..."
 npm run build
 
-# Build installers for all platforms
+# Create installers
 echo "📀 Creating installers..."
 
-# Windows
-echo "🪟 Building Windows installer..."
-npm run package:win
-
-# macOS (only on macOS)
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo "🍎 Building macOS installer..."
-  npm run package:mac
+# Build for current platform
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    echo "🪟 Building Windows installer..."
+    npm run package:win
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "🍎 Building macOS installer..."
+    npm run package:mac
+else
+    echo "🐧 Building Linux installer..."
+    npm run package:linux
 fi
-
-# Linux
-echo "🐧 Building Linux installer..."
-npm run package:linux
 
 echo "✅ Build complete! Installers available in dist-electron/"
 
-# Optional: Generate checksums
+# Generate checksums
 echo "🔒 Generating checksums..."
 cd dist-electron
-sha256sum * > checksums.txt
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    certutil -hashfile "Luna AI Assistant Setup.exe" SHA256 > checksums.txt
+else
+    sha256sum * > checksums.txt
+fi
 cd ..
 
 echo "🎉 All done! Check dist-electron/ for your installers"
