@@ -1,14 +1,20 @@
 @echo off
-echo Building Luna AI Assistant for Windows...
+setlocal enabledelayedexpansion
+
+echo Building Luna AI Assistant...
 
 :: Clean previous builds
 if exist dist-electron rmdir /s /q dist-electron
+if exist dist rmdir /s /q dist
 
 :: Install dependencies
 call npm install
 
-:: Build and package
+:: Build app
+call npm run build
+
+:: Create Windows installer
 call npm run package:win
 
-echo Build complete! Check dist-electron folder for the installer
+echo Build complete! Check dist-electron folder
 pause

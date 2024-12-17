@@ -5,14 +5,14 @@
   "main": "dist-electron/main.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"electron .\"",
-    "build": "tsc && vite build && tsc -p tsconfig.electron.json",
+    "dev": "vite",
+    "build": "tsc && vite build && tsc -p electron/tsconfig.electron.json",
     "lint": "eslint .",
     "package": "npm run build && electron-builder",
     "train": "node scripts/train.js",
-    "package:win": "npm run build && electron-builder --win",
-    "package:mac": "npm run build && electron-builder --mac",
-    "package:linux": "npm run build && electron-builder --linux"
+    "package:win": "electron-builder --win",
+    "package:mac": "electron-builder --mac",
+    "package:linux": "electron-builder --linux"
   },
   "dependencies": {
     "@xenova/transformers": "^2.17.2",
@@ -54,8 +54,7 @@
     "appId": "com.luna.assistant",
     "productName": "Luna AI Assistant",
     "directories": {
-      "output": "dist-electron",
-      "buildResources": "build"
+      "output": "dist-electron"
     },
     "files": [
       "dist/**/*",
