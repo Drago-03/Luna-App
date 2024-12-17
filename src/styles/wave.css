@@ -1,0 +1,59 @@
+.wave-indicator {
+    filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.5));
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 50;
+    width: var(--wave-size);
+    height: var(--wave-size);
+}
+  
+.wave-indicator:hover {
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.7));
+    transform: scale(1.1);
+}
+.wave-container {
+    --wave-size: 32px;
+    animation: wave-float 3s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--wave-size);
+    height: var(--wave-size);
+}
+
+.wave-container[data-size] {
+    --wave-size: attr(data-size px);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .wave-indicator {
+        filter: drop-shadow(0 0 4px rgba(96, 165, 250, 0.6));
+    }
+    
+    .wave-indicator:hover {
+        filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.8));
+    }
+}
+
+/* Responsive sizes */
+@media (max-width: 640px) {
+    .wave-indicator {
+        transform: scale(0.8);
+    }
+    
+    .wave-indicator:hover {
+        transform: scale(0.9);
+    }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion) {
+    .wave-container {
+        animation: none;
+    }
+    
+    .wave-indicator {
+        transition: none;
+    }
+}
