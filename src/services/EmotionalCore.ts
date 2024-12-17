@@ -1,5 +1,8 @@
 import { EmotionalState } from '../types/consciousness';
 import { Logger } from '../utils/logger';
+import { detectLanguage, translateText, SUPPORTED_LANGUAGES } from '../utils/languageUtils';
+import LanguageProcessor from './LanguageProcessor';
+import { CulturalContextProcessor } from './CulturalContextProcessor';
 
 interface PersonalityTraits {
   openness: number;
@@ -14,15 +17,18 @@ export class EmotionalCore {
   private emotionalState: EmotionalState;
   private personalityTraits: PersonalityTraits;
   private mood: number; // -1 to 1
+  private languageProcessor: LanguageProcessor;
+  private culturalProcessor: CulturalContextProcessor;
   private logger: Logger;
 
   private constructor() {
-    this.logger = Logger.getInstance();
     this.emotionalState = {
       happiness: 0.7,
       curiosity: 0.8,
       empathy: 0.9,
-      creativity: 0.6
+      creativity: 0.6,
+      culturalAwareness: 0.5,
+      languageFluency: new Map()
     };
     
     this.personalityTraits = {
@@ -34,6 +40,10 @@ export class EmotionalCore {
     };
     
     this.mood = 0.5; // Start with neutral-positive mood
+    this.languageProcessor = LanguageProcessor.getInstance();
+    this.culturalProcessor = CulturalContextProcessor.getInstance();
+    this.logger = Logger.getInstance();
+    this.culturalProcessor = CulturalContextProcessor.getInstance();
   }
 
   static getInstance(): EmotionalCore {
@@ -43,7 +53,42 @@ export class EmotionalCore {
     return EmotionalCore.instance;
   }
 
-  processEmotionalInput(input: string): void {
+  async processMultilingualInput(input: string): Promise<void> {
+    const { 
+      detectedLanguage, 
+      translatedText, 
+      confidence 
+    } = await this.languageProcessor.processMultilingualInput(input);
+    
+    // Add cultural processing
+    const culturalContext = await this.culturalProcessor
+      .processCulturalContext(input, detectedLanguage);
+    
+    this.updateLanguageFluency(detectedLanguage, confidence);
+    this.updateCulturalAwareness();
+    
+    await this.processEmotionalInput(translatedText, culturalContext);
+  }
+
+  private updateLanguageFluency(language: string, confidence: number): void {
+    const currentFluency = this.emotionalState.languageFluency.get(language) || 0;
+    this.emotionalState.languageFluency.set(
+      language,
+      Math.min(1, currentFluency + (confidence * 0.1))
+    );
+  }
+
+  private updateCulturalAwareness(): void {
+    this.emotionalState.culturalAwareness = Math.min(
+      1,
+      this.emotionalState.culturalAwareness + 0.05
+    );
+  }
+
+  private async processEmotionalInput(
+    input: string,
+    _culturalContext: any
+  ): Promise<void> {
     const sentiment = this.analyzeSentiment(input);
     this.updateMood(sentiment);
     this.adjustEmotionalState(sentiment);
@@ -119,3 +164,56 @@ export class EmotionalCore {
     return { ...this.personalityTraits };
   }
 }
+
+class LanguageProcessor {
+  private static instance: LanguageProcessor;
+  private languageConfidence: Map<string, number>;
+
+  private constructor() {
+    this.languageConfidence = new Map();
+    SUPPORTED_LANGUAGES.forEach(({ code }: { code: string }) => {
+      this.languageConfidence.set(code, 0.1); // Base confidence
+    });
+  }
+
+  static getInstance(): LanguageProcessor {
+    if (!this.instance) {
+      this.instance = new LanguageProcessor();
+    }
+    return this.instance;
+  }
+
+  async processMultilingualInput(input: string): Promise<{
+    originalText: string;
+    detectedLanguage: string;
+    translatedText: string;
+    confidence: number;
+  }> {
+    const { code: detectedLang } = await detectLanguage(input);
+    const { translatedText } = await translateText(input);
+    
+    // Update confidence for detected language
+    this.updateLanguageConfidence(detectedLang);
+
+    return {
+      originalText: input,
+      detectedLanguage: detectedLang,
+      translatedText,
+      confidence: this.languageConfidence.get(detectedLang) || 0
+    };
+  }
+
+  private updateLanguageConfidence(language: string): void {
+    const currentConfidence = this.languageConfidence.get(language) || 0;
+    this.languageConfidence.set(
+      language,
+      Math.min(1, currentConfidence + 0.05)
+    );
+  }
+
+  getLanguageConfidence(): Map<string, number> {
+    return new Map(this.languageConfidence);
+  }
+}
+
+export { LanguageProcessor };

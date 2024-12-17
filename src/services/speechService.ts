@@ -1,4 +1,12 @@
 import { Logger } from '../utils/logger';
+import type { SpeechRecognition } from 'web-speech-api';
+
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+}
 
 export class SpeechService {
   private synthesis: SpeechSynthesis;
@@ -6,6 +14,10 @@ export class SpeechService {
   private voice: SpeechSynthesisVoice | null = null;
   private logger: Logger;
   private isSupported: boolean;
+  private recognizers: Map<string, SpeechRecognition>;
+  private voices: Map<string, SpeechSynthesisVoice>;
+  private currentLanguage: string = 'en-US';
+  createRecognizer: any;
 
   constructor() {
     this.logger = Logger.getInstance();
@@ -13,6 +25,9 @@ export class SpeechService {
     this.isSupported = this.checkSpeechSupport();
     this.recognition = this.initializeSpeechRecognition();
     this.initializeVoice();
+    this.recognizers = new Map();
+    this.voices = new Map();
+    this.initializeMultilingualSupport();
   }
 
   private checkSpeechSupport(): boolean {
@@ -39,7 +54,7 @@ export class SpeechService {
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: { error: any; }) => {
       this.logger.log(`Speech recognition error: ${event.error}`, 'error');
     };
 
@@ -71,24 +86,42 @@ export class SpeechService {
     this.synthesis.addEventListener('voiceschanged', loadVoices);
   }
 
-  speak(text: string): void {
-    if (!this.synthesis || !this.voice) {
-      this.logger.log('Speech synthesis not available', 'warning');
-      return;
-    }
+  private initializeMultilingualSupport() {
+    // Initialize for major languages
+    const languages = [
+      'en-US', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 
+      'ja-JP', 'ko-KR', 'zh-CN', 'ru-RU', 'ar-SA'
+    ];
 
-    // Cancel any ongoing speech
-    this.synthesis.cancel();
+    languages.forEach(lang => {
+      const recognition = this.createRecognizer(lang);
+      if (recognition) {
+        this.recognizers.set(lang, recognition);
+      }
+    });
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = this.voice;
-    utterance.pitch = 1.1; // Slightly higher pitch for more feminine voice
-    utterance.rate = 1.0;
-    
-    utterance.onerror = (event) => {
-      this.logger.log(`Speech synthesis error: ${event.error}`, 'error');
+    // Load voices for all languages
+    this.loadVoices();
+  }
+
+  private loadVoices() {
+    const loadVoicesCallback = () => {
+      const availableVoices = this.synthesis.getVoices();
+      availableVoices.forEach(voice => {
+        this.voices.set(voice.lang, voice);
+      });
     };
 
+    if (this.synthesis.onvoiceschanged !== undefined) {
+      this.synthesis.onvoiceschanged = loadVoicesCallback;
+    }
+    loadVoicesCallback();
+  }
+
+  speak(text: string, language: string = this.currentLanguage): void {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = this.voices.get(language) || null;
+    utterance.lang = language;
     this.synthesis.speak(utterance);
   }
 
@@ -100,7 +133,7 @@ export class SpeechService {
 
     let finalTranscript = '';
 
-    this.recognition.onresult = (event) => {
+    this.recognition.onresult = (event: { resultIndex: any; results: string | any[]; }) => {
       let interimTranscript = '';
 
       for (let i = event.resultIndex; i < event.results.length; i++) {

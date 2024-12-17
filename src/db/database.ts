@@ -26,6 +26,7 @@ export interface Memory {
     empathy: number;
     creativity: number;
   };
+  language: string;
 }
 
 export class LunaDatabase extends Dexie {

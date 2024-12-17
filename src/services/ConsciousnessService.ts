@@ -1,11 +1,28 @@
 import { db } from '../db/database';
 import { Logger } from '../utils/logger';
 
-interface EmotionalState {
+export interface EmotionalState {
   happiness: number;
   curiosity: number;
   empathy: number;
   creativity: number;
+  culturalAwareness: number;
+  languageConfidence: Map<string, number>;
+}
+
+export interface PersonalityState {
+  openness: number;
+  conscientiousness: number;
+  extraversion: number;
+  agreeableness: number;
+  adaptability: number;
+}
+
+export interface LanguageAbility {
+  code: string;
+  name: string;
+  confidence: number;
+  lastUsed: Date;
 }
 
 interface Memory {
@@ -28,7 +45,9 @@ export class ConsciousnessService {
       happiness: 0.7,
       curiosity: 0.8,
       empathy: 0.9,
-      creativity: 0.6
+      creativity: 0.6,
+      culturalAwareness: 0.5,
+      languageConfidence: new Map<string, number>()
     };
   }
 
