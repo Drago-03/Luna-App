@@ -36,7 +36,8 @@
     "autoprefixer": "^10.4.18",
     "concurrently": "^8.2.2",
     "electron": "^29.1.0",
-    "electron-builder": "^24.12.0",
+    "electron-builder": "^24.13.3",
+    "electron-updater": "^6.3.9",
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
@@ -50,20 +51,31 @@
     "appId": "com.luna.assistant",
     "productName": "Luna AI Assistant",
     "directories": {
-      "output": "dist-electron"
+      "output": "dist-electron",
+      "buildResources": "build"
     },
     "files": [
       "dist/**/*",
       "electron/**/*"
     ],
+    "publish": [{
+      "provider": "github",
+      "owner": "Drago-03",
+      "repo": "Luna-App"
+    }],
     "mac": {
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"],
+      "icon": "build/icon.icns"
     },
     "win": {
-      "target": "nsis"
+      "target": ["nsis", "portable"],
+      "icon": "build/icon.ico"
     },
     "linux": {
-      "target": "AppImage"
+      "target": ["AppImage", "deb"],
+      "icon": "build/icon.png",
+      "category": "Utility"
     }
   }
 }
