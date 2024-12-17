@@ -72,7 +72,7 @@
       "icon": "build/icon.icns"
     },
     "win": {
-      "target": ["nsis", "portable"],
+      "target": ["nsis"],
       "icon": "build/icon.ico"
     },
     "linux": {
