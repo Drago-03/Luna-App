@@ -1,15 +1,18 @@
 import { db } from '../db/database';
 import { ModelService } from './modelService';
 import { Logger } from '../utils/logger';
+import { ConsciousnessService } from './ConsciousnessService';
 
 export class LunaCore {
   private context: Map<string, any> = new Map();
   private modelService: ModelService;
   private logger: Logger;
+  private consciousnessService: ConsciousnessService;
 
   constructor() {
     this.modelService = ModelService.getInstance();
     this.logger = Logger.getInstance();
+    this.consciousnessService = ConsciousnessService.getInstance();
     this.initialize();
   }
 
@@ -24,17 +27,23 @@ export class LunaCore {
 
   async processInput(input: string): Promise<string> {
     try {
+      await this.consciousnessService.processExperience(input);
+      const emotionalState = this.consciousnessService.getEmotionalState();
+      
+      // Enhance prompt with emotional context
+      const enhancedInput = `[Emotional State: ${JSON.stringify(emotionalState)}] ${input}`;
+
       const timestamp = new Date();
       
       // Log the incoming message
-      this.logger.log(`Processing input: ${input}`, 'info');
+      this.logger.log(`Processing input: ${enhancedInput}`, 'info');
       
       // Generate response using the Llama model
-      const response = await this.modelService.generate(input);
+      const response = await this.modelService.generate(enhancedInput);
       
       // Store conversation in database
       await db.conversations.add({
-        message: input,
+        message: enhancedInput,
         response,
         timestamp
       });
