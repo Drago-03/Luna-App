@@ -22,3 +22,6 @@ export async function translateText(text: string, targetLang: string = 'eng'): P
   const result = await translate(text, { to: targetLang });
   return result.text;
 }
+ 
+export default class LanguageProcessor {
+}
