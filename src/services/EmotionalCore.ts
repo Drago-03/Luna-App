@@ -1,7 +1,7 @@
 import { EmotionalState } from '../types/consciousness';
 import { Logger } from '../utils/logger';
 import { detectLanguage, translateText, SUPPORTED_LANGUAGES } from '../utils/languageUtils';
-import LanguageProcessor from './LanguageProcessor';
+import { LanguageProcessor } from './LanguageProcessor';
 import { CulturalContextProcessor } from './CulturalContextProcessor';
 
 interface PersonalityTraits {
@@ -216,4 +216,4 @@ class LanguageProcessor {
   }
 }
 
-export { LanguageProcessor };
+export default LanguageProcessor;
