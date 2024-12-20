@@ -1,19 +1,21 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "luna-ai-assistant",
   "private": true,
   "version": "0.1.0",
   "main": "dist-electron/main.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "electron .",
+    "dev": "concurrently \"vite\" \"electron .\"",
     "build": "tsc && vite build && tsc -p electron/tsconfig.electron.json",
+    "launch": "electron .",
     "lint": "eslint .",
     "package": "npm run build && electron-builder",
     "train": "node scripts/train.js",
     "package:win": "electron-builder --win",
     "package:mac": "electron-builder --mac",
-    "package:linux": "electron-builder --linux",
-    "start": "electron ."
+    "package:linux": "electron-builder --linux"
   },
   "dependencies": {
     "@vitalets/google-translate-api": "^9.2.0",
@@ -36,7 +38,7 @@
   },
   "devDependencies": {
     "@types/json-schema": "^7.0.15",
-    "@types/react": "^18.3.5",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",

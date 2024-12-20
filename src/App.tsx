@@ -19,12 +19,12 @@ function App() {
 
   useEffect(() => {
     // Listen for wake word
-    const handleWakeWord = (event: CustomEvent) => {
+    const handleWakeWord = () => {
       setIsMinimized(false);
     };
 
-    window.addEventListener('wake-word-detected', handleWakeWord);
-    return () => window.removeEventListener('wake-word-detected', handleWakeWord);
+    window.addEventListener('wake-word-detected', handleWakeWord as EventListener);
+    return () => window.removeEventListener('wake-word-detected', handleWakeWord as EventListener);
   }, []);
 
   const handleLunaResponse = async (text: string) => {

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, Tray, ipcMain, screen, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -16,12 +16,14 @@ class LunaApp {
     this.handleAppEvents();
     this.createTray();
     this.setupGlobalShortcut();
+    this.setupGlobalHotkey();
   }
 
   private initApp() {
     app.whenReady().then(() => {
       this.createWindow();
       this.setupUpdater();
+      this.createFloatingWave();
     });
   }
 
@@ -100,6 +102,31 @@ class LunaApp {
     this.tray.on('click', () => this.toggleAssistant());
   }
 
+  private createFloatingWave() {
+    const display = screen.getPrimaryDisplay();
+    const waveWindow = new BrowserWindow({
+      width: 64,
+      height: 64,
+      x: display.workArea.width - 80,
+      y: 20,
+      frame: false,
+      transparent: true,
+      alwaysOnTop: true,
+      skipTaskbar: true,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js')
+      }
+    });
+
+    waveWindow.loadURL('about:blank');
+    waveWindow.webContents.executeJavaScript(`
+      document.body.innerHTML = '<div id="wave"></div>';
+      // Inject wave animation
+    `);
+  }
+
   private setupGlobalShortcut() {
     // Listen for "Hey Luna" wake word
     ipcMain.on('wake-word-detected', () => {
@@ -107,12 +134,40 @@ class LunaApp {
     });
   }
 
+  private setupGlobalHotkey() {
+    globalShortcut.register('Alt+Space', () => {
+      this.toggleAssistant();
+    });
+  }
+
   private toggleAssistant() {
     if (this.mainWindow && this.mainWindow.isVisible()) {
       this.mainWindow.hide();
     } else {
-      this.showFloatingWindow();
+      this.showAssistant();
     }
+  }
+
+  private showAssistant() {
+    const display = screen.getPrimaryDisplay();
+    if (!this.mainWindow) {
+      this.mainWindow = new BrowserWindow({
+        width: 400,
+        height: 600,
+        x: display.workArea.width - 420,
+        y: 80,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        webPreferences: {
+          nodeIntegration: true,
+          contextIsolation: true,
+          preload: path.join(__dirname, 'preload.js')
+        }
+      });
+    }
+    this.mainWindow.show();
+    this.mainWindow.focus();
   }
 
   private showFloatingWindow() {
