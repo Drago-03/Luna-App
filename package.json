@@ -12,7 +12,8 @@
     "train": "node scripts/train.js",
     "package:win": "electron-builder --win",
     "package:mac": "electron-builder --mac",
-    "package:linux": "electron-builder --linux"
+    "package:linux": "electron-builder --linux",
+    "start": "electron ."
   },
   "dependencies": {
     "@vitalets/google-translate-api": "^9.2.0",

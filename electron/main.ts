@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, Tray, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,10 +8,14 @@ const __dirname = path.dirname(__filename);
 
 class LunaApp {
   private mainWindow: BrowserWindow | null = null;
+  private tray: Tray | null = null;
+  private isListening: boolean = false;
 
   constructor() {
     this.initApp();
     this.handleAppEvents();
+    this.createTray();
+    this.setupGlobalShortcut();
   }
 
   private initApp() {
@@ -88,6 +92,52 @@ class LunaApp {
 
     // Check for updates
     autoUpdater.checkForUpdatesAndNotify();
+  }
+
+  private createTray() {
+    this.tray = new Tray(path.join(__dirname, '../build/icon.ico'));
+    this.tray.setToolTip('Luna AI Assistant');
+    this.tray.on('click', () => this.toggleAssistant());
+  }
+
+  private setupGlobalShortcut() {
+    // Listen for "Hey Luna" wake word
+    ipcMain.on('wake-word-detected', () => {
+      this.showFloatingWindow();
+    });
+  }
+
+  private toggleAssistant() {
+    if (this.mainWindow && this.mainWindow.isVisible()) {
+      this.mainWindow.hide();
+    } else {
+      this.showFloatingWindow();
+    }
+  }
+
+  private showFloatingWindow() {
+    const { width } = screen.getPrimaryDisplay().workAreaSize;
+    
+    if (!this.mainWindow) {
+      this.mainWindow = new BrowserWindow({
+        width: 400,
+        height: 600,
+        x: width - 420,
+        y: 40,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        skipTaskbar: true,
+        webPreferences: {
+          nodeIntegration: true,
+          contextIsolation: true,
+          preload: path.join(__dirname, 'preload.js')
+        }
+      });
+    }
+
+    this.mainWindow.show();
+    this.mainWindow.focus();
   }
 }
 
