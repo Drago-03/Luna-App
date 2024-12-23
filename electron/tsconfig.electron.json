@@ -1,11 +1,10 @@
 {
-  // Removed schema reference due to loading issues
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2022",
-    "forceConsistentCasingInFileNames": true,
     "module": "CommonJS",
-    "outDir": "dist",
-    "rootDir": "electron",
+    "outDir": "../dist-electron",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,16 +12,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "electron/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist"]
 }

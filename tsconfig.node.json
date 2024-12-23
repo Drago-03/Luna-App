@@ -1,25 +1,14 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  // Removed schema reference to avoid loading issues
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "module": "ESNext",
+    "composite": true,
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "Node",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-
-    /* Linting */
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "composite": true,        // Required for project references
-    "outDir": "./dist/node"   // Specify output directory
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["vite.config.ts"]
 }

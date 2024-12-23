@@ -6,20 +6,13 @@
   "main": "dist-electron/main.js",
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
-    "dev": "concurrently \"vite\" \"npm run electron:dev\"",
-    "build": "tsc && vite build && tsc -p electron/tsconfig.electron.json",
-    "build-electron": "tsc -p electron/tsconfig.electron.json",
-    "launch": "npm run build-electron && electron .",
-    "lint": "eslint .",
-    "package": "electron-builder build",
-    "train": "node scripts/train.js",
-    "package:win": "npm run build && electron-builder --win",
-    "package:mac": "npm run build && electron-builder --mac",
-    "package:linux": "npm run build && electron-builder --linux",
-    "preview": "vite preview",
-    "electron:dev": "wait-on tcp:5173 && electron .",
-    "electron:build": "npm run build-electron && electron-builder"
+      "start": "npm run dev",
+      "dev": "concurrently \"vite\" \"npm run electron:dev\"",
+      "build": "tsc && vite build && tsc -p electron/tsconfig.electron.json",
+      "build-electron": "tsc -p electron/tsconfig.electron.json",
+      "launch": "electron .",
+      "electron:dev": "wait-on tcp:5173 && electron .",
+    "package": "electron-builder build"
   },
   "dependencies": {
     "@vitalets/google-translate-api": "^9.2.0",
