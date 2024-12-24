@@ -1,17 +1,10 @@
-import { Pipeline } from '@xenova/transformers';
-import * as Comlink from 'comlink';
+import { Model } from '@xenova/transformers';
 
 export class ModelService {
   private static instance: ModelService;
-  private model: Pipeline | null = null;
-  private worker: Worker | null = null;
+  private model: Model | null = null;
 
-  private constructor() {
-    // Initialize web worker for model operations
-    this.worker = new Worker(new URL('../workers/model.worker.ts', import.meta.url), {
-      type: 'module'
-    });
-  }
+  private constructor() {}
 
   static getInstance(): ModelService {
     if (!ModelService.instance) {
@@ -20,24 +13,15 @@ export class ModelService {
     return ModelService.instance;
   }
 
-  async initialize(): Promise<void> {
-    if (!this.worker) return;
-    
-    const workerApi = Comlink.wrap(this.worker);
-    await workerApi.initializeModel();
+  async loadModel(modelPath: string): Promise<void> {
+    this.model = await Model.load(modelPath);
   }
 
-  async generate(prompt: string): Promise<string> {
-    if (!this.worker) return "Model not initialized";
-    
-    const workerApi = Comlink.wrap(this.worker);
-    return await workerApi.generate(prompt);
-  }
-
-  async train(data: Array<{input: string, output: string}>): Promise<void> {
-    if (!this.worker) return;
-    
-    const workerApi = Comlink.wrap(this.worker);
-    await workerApi.train(data);
+  async predict(input: string): Promise<string> {
+    if (!this.model) {
+      throw new Error('Model not loaded');
+    }
+    const result = await this.model.predict(input);
+    return result;
   }
 }

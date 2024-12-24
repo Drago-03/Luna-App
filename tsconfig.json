@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "isolatedModules": true,
     "noEmit": true,
     "strict": true,
@@ -8,12 +9,18 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*"]
+    },
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
     ]
   },
+  "include": ["src/**/*"],
   "references": [
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "exclude": ["vite.config.ts"]
 }

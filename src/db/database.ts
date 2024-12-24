@@ -28,7 +28,7 @@ export interface Memory {
   timestamp: Date;
   emotions: EmotionalState;
   culturalContext: CulturalContext;
-  associations: number[];  // IDs of related memories
+  associations: number[];
   lastAccessed: Date;
 }
 
@@ -46,7 +46,6 @@ export class LunaDatabase extends Dexie {
       learningData: '++id, topic, category, lastUpdated, importance',
       memories: '++id, type, language, importance, timestamp, lastAccessed, content'
     }).upgrade(tx => {
-      // Upgrade logic for existing data
       return tx.table('memories').toCollection().modify(memory => {
         memory.language = memory.language || 'en';
         memory.lastAccessed = memory.lastAccessed || new Date();
@@ -54,8 +53,7 @@ export class LunaDatabase extends Dexie {
       });
     });
 
-    // Create indexes for faster querying
-    this.memories.hook('creating', function(_primKey, obj) {
+    this.memories.hook('creating', function(primKey, obj) {
       obj.lastAccessed = new Date();
       return undefined;
     });
@@ -93,7 +91,6 @@ export class LunaDatabase extends Dexie {
           memories[j].content
         );
         if (similarity > 0.8) {
-          // Update associations
           memories[i].associations = [...new Set([
             ...memories[i].associations,
             memories[j].id as number

@@ -26,7 +26,7 @@ export class MemoryService {
       allMemories.forEach(memory => {
         this.memories.set(memory.id!, memory);
         if (memory.importance > 0.7) {
-          this.importantMemories.add(memory.id! as number);
+          this.importantMemories.add(memory.id!);
         }
       });
       this.logger.log(`Loaded ${allMemories.length} memories`, 'info');
@@ -38,15 +38,15 @@ export class MemoryService {
   async storeMemory(memory: Memory): Promise<number> {
     try {
       const id = await db.memories.add(memory);
-      memory.id = id as number;
-      this.memories.set(id as number, memory);
+      memory.id = id;
+      this.memories.set(id, memory);
       
       if (memory.importance > 0.7) {
-        this.importantMemories.add(id as number);
+        this.importantMemories.add(id);
       }
       
       this.logger.log(`Stored new memory with ID: ${id}`, 'info');
-      return id as number;
+      return id;
     } catch (error) {
       this.logger.log(`Error storing memory: ${error}`, 'error');
       throw error;
@@ -95,7 +95,6 @@ export class MemoryService {
 
   async consolidateMemories(): Promise<void> {
     try {
-      // Consolidate similar memories and update importance scores
       const memories = Array.from(this.memories.values());
       for (let i = 0; i < memories.length; i++) {
         for (let j = i + 1; j < memories.length; j++) {

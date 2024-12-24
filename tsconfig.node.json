@@ -1,14 +1,21 @@
 {
-  // Removed schema reference to avoid loading issues
   "compilerOptions": {
     "composite": true,
-    "skipLibCheck": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "skipLibCheck": true,
     "strict": true,
-    "outDir": "dist",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "outDir": "./dist/node",
+    "esModuleInterop": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

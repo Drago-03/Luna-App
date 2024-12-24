@@ -1,47 +1,23 @@
-import { useState } from 'react';
-import { WaveIndicator } from './WaveIndicator';
-import '../styles/wave.css';
+import React from 'react';
 
 interface WaveIconProps {
-  position?: {
-    bottom?: number;
-    right?: number;
-  };
-  defaultSize?: number;
-  hoverSize?: number;
-  defaultColor?: string;
-  hoverColor?: string;
+  size: number;
+  color: string;
 }
 
-export const WaveIcon = ({
-  position = { bottom: 0, right: 16 },
-  defaultSize = 32,
-  hoverSize = 36,
-  defaultColor = '#3B82F6',
-  hoverColor = '#60A5FA'
-}: WaveIconProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+export const WaveIcon: React.FC<WaveIconProps> = ({ size, color }) => {
   return (
-    <div 
-      className="fixed cursor-pointer transition-all duration-200 ease-in-out wave-icon"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <WaveIndicator 
-        size={isHovered ? hoverSize : defaultSize}
-        color={isHovered ? hoverColor : defaultColor} 
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+        fill={color}
       />
-      <style>
-        {`
-          :root {
-            --wave-icon-bottom: ${position.bottom}px;
-            --wave-icon-right: ${position.right}px;
-          }
-        `}
-      </style>
-    </div>
+    </svg>
   );
 };
-
-export default WaveIcon;

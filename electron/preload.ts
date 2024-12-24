@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 // Type declarations for TypeScript
 declare global {
@@ -31,8 +31,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.on('update-available', callback),
   onUpdateDownloaded: (callback: () => void) => 
     ipcRenderer.on('update-downloaded', callback),
-  onUpdateError: (callback: (error: Error) => void) => 
-    ipcRenderer.on('update-error', (event, error) => callback(error)),
+  onUpdateError: (callback: (event: IpcRendererEvent, error: Error) => void) => 
+    ipcRenderer.on('update-error', (event, error) => callback(event, error)),
   isDevMode: () => process.env.NODE_ENV === 'development',
   minimize: () => ipcRenderer.send('window-minimize'),
   maximize: () => ipcRenderer.send('window-maximize'),

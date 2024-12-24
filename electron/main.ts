@@ -14,9 +14,6 @@ class LunaApp {
       this.setupUpdater();
     });
   }
-  setupUpdater() {
-    throw new Error('Method not implemented.');
-  }
 
   private createWindow() {
     this.mainWindow = new BrowserWindow({
@@ -34,6 +31,10 @@ class LunaApp {
     } else {
       this.mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
     }
+  }
+
+  private setupUpdater() {
+    // Implement auto-updater logic here
   }
 }
 
