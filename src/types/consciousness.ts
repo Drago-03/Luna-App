@@ -4,8 +4,17 @@ export interface EmotionalState {
     dominance: number;  // 0 to 1, representing feeling of control
 }
 
-export enum CulturalContext {
-    Western = 'Western',
-    Eastern = 'Eastern',
-    // Add other cultural contexts as needed
+export interface CulturalContext {
+  language: string;
+  region: string;
+  confidence: number;
+  lastInteraction: Date;
+  respectLevel: string;
+  greeting: string;
+}
+
+// Keep the enum if needed for other purposes
+export enum CulturalContextType {
+  Western = 'Western',
+  Eastern = 'Eastern'
 } 

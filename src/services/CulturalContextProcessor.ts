@@ -27,13 +27,14 @@ export class CulturalContextProcessor {
     }
     return this.instance;
   }
-
   async processCulturalContext(language: string, _detectedLanguage: string): Promise<CulturalContext> {
     return {
-      language,
+      language: language,
       region: this.getRegionForLanguage(language),
-      confidence: this.calculateCulturalConfidence(language),
-      lastInteraction: new Date()
+      confidence: this.calculateCulturalConfidence(language), 
+      lastInteraction: new Date(),
+      respectLevel: this.culturalData.get('respect')?.get(language) || 'standard',
+      greeting: this.culturalData.get('greeting')?.get(language) || 'Hello'
     };
   }
 
