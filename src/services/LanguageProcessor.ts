@@ -24,4 +24,18 @@ export async function translateText(text: string, targetLang: string = 'eng'): P
 }
  
 export default class LanguageProcessor {
+  private static instance: LanguageProcessor;
+
+  static getInstance(): LanguageProcessor {
+    if (!LanguageProcessor.instance) {
+      LanguageProcessor.instance = new LanguageProcessor();
+    }
+    return LanguageProcessor.instance;
+  }
+
+  private constructor() {
+    // initialization code
+  }
+
+  // ... rest of the class implementation
 }

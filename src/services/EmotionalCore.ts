@@ -1,5 +1,5 @@
 import { EmotionalState, CulturalContext } from '../types/consciousness';
-import { LanguageProcessor } from './LanguageProcessor';
+import LanguageProcessor from './LanguageProcessor';
 
 export class EmotionalCore {
   private static instance: EmotionalCore;
@@ -7,12 +7,18 @@ export class EmotionalCore {
   private culturalContexts: Map<string, CulturalContext>;
   private languageProcessor: LanguageProcessor;
 
+  static getInstance(): EmotionalCore {
+    if (!EmotionalCore.instance) {
+      EmotionalCore.instance = new EmotionalCore();
+    }
+    return EmotionalCore.instance;
+  }
+
   private constructor() {
     this.emotionalState = {
-      happiness: 0.7,
-      curiosity: 0.8,
-      empathy: 0.9,
-      creativity: 0.6,
+      valence: 0.7,
+      arousal: 0.8,
+      dominance: 0.6,
       culturalAwareness: 0.5,
       languageFluency: new Map()
     };
@@ -55,5 +61,19 @@ export class EmotionalCore {
     const sentiment = this.analyzeSentiment(input);
     this.updateMood(sentiment);
     this.adjustEmotionalState(sentiment, culturalContext);
+  }
+
+  private getCulturalContext(language: string): CulturalContext {
+    if (!this.culturalContexts.has(language)) {
+      this.culturalContexts.set(language, {
+        language,
+        region: 'Unknown',
+        confidence: 0.5,
+        lastInteraction: new Date(),
+        respectLevel: 'standard',
+        greeting: 'Hello'
+      });
+    }
+    return this.culturalContexts.get(language)!;
   }
 }
