@@ -9,8 +9,7 @@ class ModelWorker {
       const model = await AutoModelForCausalLM.from_pretrained('Xenova/LLaMA-70b');
       this.model = new Pipeline({
         task: 'text-generation',
-        model: model,
-        quantized: true
+        model: model
       });
     } catch (error) {
       console.error('Error initializing model:', error);
