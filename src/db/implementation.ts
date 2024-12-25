@@ -6,7 +6,9 @@ import { EmotionalState, CulturalContext } from '../types/consciousness';
 const currentEmotionalState: EmotionalState = {
     valence: 0.8,
     arousal: 0.5,
-    dominance: 0.6
+    dominance: 0.6,
+    culturalAwareness: 0,
+    languageFluency: new Map<string, number>()
 }; 
 
 const culturalContext: CulturalContext = {
