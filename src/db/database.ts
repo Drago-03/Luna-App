@@ -53,7 +53,7 @@ export class LunaDatabase extends Dexie {
       });
     });
 
-    this.memories.hook('creating', function(primKey, obj) {
+    this.memories.hook('creating', function(_primKey, obj) {
       obj.lastAccessed = new Date();
       return undefined;
     });
@@ -75,11 +75,11 @@ export class LunaDatabase extends Dexie {
   }
 
   private calculateSimilarity(text1: string, text2: string): number {
-    const words1 = new Set(text1.toLowerCase().split(' '));
-    const words2 = new Set(text2.toLowerCase().split(' '));
-    const intersection = new Set([...words1].filter(x => words2.has(x)));
-    const union = new Set([...words1, ...words2]);
-    return intersection.size / union.size;
+    const words1 = text1.toLowerCase().split(' ');
+    const words2 = text2.toLowerCase().split(' ');
+    const intersection = words1.filter(x => words2.includes(x));
+    const union = Array.from(new Set([...words1, ...words2]));
+    return intersection.length / union.length;
   }
 
   async consolidateMemories(): Promise<void> {
@@ -91,10 +91,10 @@ export class LunaDatabase extends Dexie {
           memories[j].content
         );
         if (similarity > 0.8) {
-          memories[i].associations = [...new Set([
+          memories[i].associations = Array.from(new Set([
             ...memories[i].associations,
             memories[j].id as number
-          ])];
+          ]));
           await this.memories.update(memories[i].id!, memories[i]);
         }
       }
