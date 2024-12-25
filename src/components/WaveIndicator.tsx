@@ -12,9 +12,7 @@ export const WaveIndicator: React.FC<WaveIndicatorProps> = ({ size, color }) => 
       style={{
         width: size,
         height: size,
-        backgroundColor: color,
-        borderRadius: '50%',
-        animation: 'wave 1.5s infinite'
+        backgroundColor: color
       }}
     />
   );
