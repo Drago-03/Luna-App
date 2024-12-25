@@ -1,4 +1,4 @@
-import { Pipeline } from '@xenova/transformers';
+import { Pipeline, AutoModelForCausalLM } from '@xenova/transformers';
 import * as Comlink from 'comlink';
 
 class ModelWorker {
@@ -6,9 +6,11 @@ class ModelWorker {
 
   async initializeModel() {
     try {
-      // Initialize specifically with Llama 70B
-      this.model = await Pipeline('text-generation', 'Xenova/LLaMA-70b', {
-        quantized: true // Use quantized model for better performance
+      const model = await AutoModelForCausalLM.from_pretrained('Xenova/LLaMA-70b');
+      this.model = new Pipeline({
+        task: 'text-generation',
+        model: model,
+        quantized: true
       });
     } catch (error) {
       console.error('Error initializing model:', error);
@@ -41,26 +43,10 @@ class ModelWorker {
     }
   }
 
-  async train(data: Array<{input: string, output: string}>) {
-    // Implementation of fine-tuning logic
-    // Note: This is a simplified version
-    if (!this.model) {
-      throw new Error('Model not initialized');
-    }
-
-    try {
-      // Process training data
-      for (const example of data) {
-        await this.model.train({
-          input: example.input,
-          output: example.output,
-        });
-      }
-    } catch (error) {
-      console.error('Error training model:', error);
-      throw error;
-    }
-  }
+  // Remove or comment out the train method since it's not supported
+  /* async train(data: Array<{input: string, output: string}>) {
+    // Training is not supported by the Pipeline class
+  } */
 }
 
 Comlink.expose(new ModelWorker());

@@ -1,22 +1,28 @@
 // importing services
 import { db } from '../db/database';
-import { EmotionalState } from '../types/consciousness';
+import { EmotionalState, CulturalContext } from '../types/consciousness';
 
-// Define currentEmotionalState
-const currentEmotionalState: EmotionalState = { mood: 'Happy' }; // Example value, replace with actual state
+// Define currentEmotionalState (assuming EmotionalState has proper interface)
+const currentEmotionalState: EmotionalState = {
+    valence: 0.8,
+    arousal: 0.5,
+    dominance: 0.6
+}; 
 
-// Define currentCulturalContext
-const currentCulturalContext = 'Western'; // Example value, replace with actual context
+// Wrap the DB operation in an async function
+async function storeMemory() {
+    await db.memories.add({
+        type: 'experience',
+        content: 'Hello Luna',
+        language: 'en',
+        importance: 0.8,
+        timestamp: new Date(),
+        emotions: currentEmotionalState,
+        culturalContext: CulturalContext.Western,
+        associations: [],
+        lastAccessed: new Date()
+    });
+}
 
-// Store memory
-await db.memories.add({
-    type: 'experience',
-    content: 'Hello Luna',
-    language: 'en',
-    importance: 0.8,
-    timestamp: new Date(),
-    emotions: currentEmotionalState,
-    culturalContext: currentCulturalContext,
-    associations: [],
-    lastAccessed: null
-});
+// Call the function
+storeMemory();

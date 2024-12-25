@@ -1,4 +1,5 @@
-import { SpeechRecognition, SpeechSynthesisUtterance } from 'web-speech-api';
+declare var webkitSpeechRecognition: any;
+declare var SpeechRecognition: any;
 
 export class SpeechService {
   private synthesis: SpeechSynthesis;
@@ -21,12 +22,17 @@ export class SpeechService {
 
     languages.forEach(lang => {
       const recognition = this.createRecognizer(lang);
-      if (recognition) {
-        this.recognizers.set(lang, recognition);
-      }
+      this.recognizers.set(lang, recognition);
     });
 
     this.loadVoices();
+  }
+  createRecognizer(lang: string): SpeechRecognition {
+    const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+    recognition.lang = lang;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    return recognition;
   }
 
   private loadVoices() {
