@@ -1,10 +1,10 @@
 import { db } from '../db/database';
-import { Memory } from '../types/consciousness';
 import { Logger } from '../utils/logger';
+import { Memory } from '../types/Memory';
 
 export class MemoryService {
   private static instance: MemoryService;
-  private logger: Logger;
+  private readonly logger: Logger = Logger.getInstance();
   private memories: Map<number, Memory> = new Map();
   private importantMemories: Set<number> = new Set();
 
@@ -24,7 +24,23 @@ export class MemoryService {
     try {
       const allMemories = await db.memories.toArray();
       allMemories.forEach(memory => {
-        this.memories.set(memory.id!, memory);
+        const newMemory: Memory = {
+          id: memory.id!,
+          content: memory.content,
+          emotions: {
+            happiness: 0,
+            curiosity: 0,
+            empathy: 0,
+            creativity: 0,
+            culturalAwareness: 0,
+            languageFluency: new Map<string, number>()
+          },
+          importance: memory.importance,
+          type: 'experience',
+          language: '',
+          timestamp: new Date()
+        };
+        this.memories.set(memory.id!, newMemory);
         if (memory.importance > 0.7) {
           this.importantMemories.add(memory.id!);
         }
@@ -37,16 +53,21 @@ export class MemoryService {
 
   async storeMemory(memory: Memory): Promise<number> {
     try {
-      const id = await db.memories.add(memory);
-      memory.id = id;
-      this.memories.set(id, memory);
+      const dbMemory: any = {
+        id: memory.id,
+        content: memory.content,
+        importance: memory.importance
+      };
+      const id = await db.memories.add(dbMemory);
+      memory.id = Number(id);
+      this.memories.set(Number(id), memory);
       
       if (memory.importance > 0.7) {
-        this.importantMemories.add(id);
+        this.importantMemories.add(Number(id));
       }
       
       this.logger.log(`Stored new memory with ID: ${id}`, 'info');
-      return id;
+      return Number(id);
     } catch (error) {
       this.logger.log(`Error storing memory: ${error}`, 'error');
       throw error;

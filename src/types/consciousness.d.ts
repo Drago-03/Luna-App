@@ -22,7 +22,7 @@ export interface LanguageCapability {
   examples: string[];
 }
 
-export interface Memory {
+export type Memory = {
   id?: number;
   type: 'experience' | 'knowledge' | 'emotion';
   content: string;
@@ -33,4 +33,4 @@ export interface Memory {
   culturalContext?: CulturalContext;
   // Missing the language property
   // ...other properties
-}
+};

@@ -11,12 +11,13 @@ export class LunaCore {
     try {
       await this.consciousnessService.processExperience(input);
       const emotionalState = this.consciousnessService.getEmotionalState();
-      
       const enhancedInput = `[Emotional State: ${JSON.stringify(emotionalState)}] ${input}`;
-      
-      // ...existing processInput logic
+      return enhancedInput;
     } catch (error) {
       // ...error handling
+      throw error;
     }
   }
+    
+  
 }
