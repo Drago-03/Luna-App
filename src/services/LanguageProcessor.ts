@@ -37,5 +37,17 @@ export default class LanguageProcessor {
     // initialization code
   }
 
+  async processMultilingualInput(input: string) {
+    const detectedLanguage = await detectLanguage(input);
+    const translatedText = await translateText(input, 'eng');
+    const confidence = 0.8; // Default confidence, could be made dynamic
+    
+    return {
+      detectedLanguage,
+      translatedText,
+      confidence
+    };
+  }
+
   // ... rest of the class implementation
 }

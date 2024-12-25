@@ -27,15 +27,16 @@ export class CulturalContextProcessor {
     }
     return this.instance;
   }
-  async processCulturalContext(language: string, _detectedLanguage: string): Promise<CulturalContext> {
-    return {
+  async processCulturalContext(language: string, detectedLanguage: string): Promise<CulturalContext> {
+    const context = {
       language: language,
       region: this.getRegionForLanguage(language),
-      confidence: this.calculateCulturalConfidence(language), 
+      confidence: this.calculateCulturalConfidence(language),
       lastInteraction: new Date(),
       respectLevel: this.culturalData.get('respect')?.get(language) || 'standard',
       greeting: this.culturalData.get('greeting')?.get(language) || 'Hello'
     };
+    return context;
   }
 
   private getRegionForLanguage(language: string): string {

@@ -36,7 +36,10 @@ export class EmotionalCore {
     this.updateLanguageFluency(detectedLanguage, confidence);
     this.updateCulturalAwareness(detectedLanguage);
     
-    await this.processEmotionalInput(translatedText, detectedLanguage);
+    await this.processEmotionalInput(
+      translatedText, 
+      this.getCulturalContext(detectedLanguage)
+    );
   }
 
   private updateLanguageFluency(language: string, confidence: number): void {
@@ -47,10 +50,13 @@ export class EmotionalCore {
     );
   }
 
-  private updateCulturalAwareness(language: string): void {
+  private updateCulturalAwareness(_language: string): void {
+    const knownLanguages = this.emotionalState.languageFluency.size;
+    const awarenessIncrease = knownLanguages > 0 ? 0.05 / knownLanguages : 0.05;
+    
     this.emotionalState.culturalAwareness = Math.min(
       1,
-      this.emotionalState.culturalAwareness + 0.05
+      this.emotionalState.culturalAwareness + awarenessIncrease
     );
   }
 
@@ -60,7 +66,16 @@ export class EmotionalCore {
   ): Promise<void> {
     const sentiment = this.analyzeSentiment(input);
     this.updateMood(sentiment);
-    this.adjustEmotionalState(sentiment, culturalContext);
+    this.updateEmotionalState(sentiment, culturalContext);
+  }
+  updateEmotionalState(_sentiment: void, _culturalContext: CulturalContext) {
+    throw new Error('Method not implemented.');
+  }
+  updateMood(_sentiment: void) {
+    throw new Error('Method not implemented.');
+  }
+  analyzeSentiment(_input: string) {
+    throw new Error('Method not implemented.');
   }
 
   private getCulturalContext(language: string): CulturalContext {
