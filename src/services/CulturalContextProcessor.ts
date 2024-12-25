@@ -27,7 +27,7 @@ export class CulturalContextProcessor {
     }
     return this.instance;
   }
-  async processCulturalContext(language: string, detectedLanguage: string): Promise<CulturalContext> {
+  async processCulturalContext(language: string, _detectedLanguage: string): Promise<CulturalContext> {
     const context = {
       language: language,
       region: this.getRegionForLanguage(language),

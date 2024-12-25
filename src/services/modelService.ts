@@ -1,8 +1,8 @@
-import { Model } from '@xenova/transformers';
+import { T5Model } from '@xenova/transformers';
 
 export class ModelService {
   private static instance: ModelService;
-  private model: Model | null = null;
+  private model: T5Model | null = null;
 
   private constructor() {}
 
@@ -14,14 +14,14 @@ export class ModelService {
   }
 
   async loadModel(modelPath: string): Promise<void> {
-    this.model = await Model.load(modelPath);
+    this.model = await T5Model.from_pretrained(modelPath);
   }
 
   async predict(input: string): Promise<string> {
     if (!this.model) {
       throw new Error('Model not loaded');
     }
-    const result = await this.model.predict(input);
+    const result = await this.model.generate([input]);
     return result;
   }
-}
+  }
