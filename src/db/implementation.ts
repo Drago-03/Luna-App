@@ -9,6 +9,15 @@ const currentEmotionalState: EmotionalState = {
     dominance: 0.6
 }; 
 
+const culturalContext: CulturalContext = {
+    language: 'en',
+    region: 'Global/Western',
+    confidence: 1.0,
+    lastInteraction: new Date(),
+    respectLevel: 'formal',
+    greeting: 'Hello'
+};
+
 // Wrap the DB operation in an async function
 async function storeMemory() {
     await db.memories.add({
@@ -18,7 +27,7 @@ async function storeMemory() {
         importance: 0.8,
         timestamp: new Date(),
         emotions: currentEmotionalState,
-        culturalContext: CulturalContext.Western,
+        culturalContext: culturalContext,
         associations: [],
         lastAccessed: new Date()
     });
