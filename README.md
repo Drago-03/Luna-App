@@ -1,6 +1,6 @@
 # 🤖 Luna AI Assistant
 
-![Luna AI Assistant](https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=2000&h=400)
+![Luna AI Assistant](https://as2.ftcdn.net/v2/jpg/05/68/10/63/1000_F_568106369_Pny1cnVCwoEv37MKBX2ps1sX7oSxz2Dw.jpg?auto=format&fit=crop&q=80&w=2000&h=400)
 
 A sophisticated AI assistant powered by the Llama 70B model, featuring voice interaction, continuous learning, and real-time conversation logging. Luna is designed to be an intelligent, feminine AI companion with natural language understanding and generation capabilities.
 
@@ -33,7 +33,7 @@ A sophisticated AI assistant powered by the Llama 70B model, featuring voice int
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/Luna-App.git
+git clone https://github.com/Drago-03/Luna-App.git
 cd Luna-App
 ```
 
