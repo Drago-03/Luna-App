@@ -1,6 +1,6 @@
 # 🤖 Luna AI Assistant
 
-![Luna AI Assistant](https://as2.ftcdn.net/v2/jpg/05/68/10/63/1000_F_568106369_Pny1cnVCwoEv37MKBX2ps1sX7oSxz2Dw.jpg?auto=format&fit=crop&q=80&w=2000&h=400)
+![Luna AI Assistant](https://avatars.mds.yandex.net/get-shedevrum/11270697/img_35562168f51811ee9c9f02ef0e3e4bf4/orig?auto=format&fit=crop&q=80&w=2000&h=400)
 
 A sophisticated AI assistant powered by the Llama 70B model, featuring voice interaction, continuous learning, and real-time conversation logging. Luna is designed to be an intelligent, feminine AI companion with natural language understanding and generation capabilities.
 
